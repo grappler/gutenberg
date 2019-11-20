@@ -18,6 +18,9 @@ export const settings = {
 	title: __( 'Typography' ),
 	description: __( 'Globally adjust font styles' ),
 	keywords: [ __( 'typography' ), __( 'text' ), __( 'font' ) ],
+	supports: {
+		align: true,
+	},
 	edit,
 	save,
 };

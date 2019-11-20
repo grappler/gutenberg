@@ -8,18 +8,21 @@ import { isUndefined } from 'lodash';
  */
 import { config } from '@wordpress/bravas';
 import { compose } from '@wordpress/compose';
-import { PanelBody, RangeControl } from '@wordpress/components';
+import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
 import { InspectorControls } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import Markup from './markup';
+import { generateFontSizes } from './utils';
 
 function GlobalTypographyEdit( { attributes, setAttributes, className } ) {
 	const {
+		fontFamilyBase,
+		fontFamilyHeading,
 		fontSizeBase,
-		lineHeight,
+		lineHeightBase,
 		lineHeightHeading,
 		typeScale,
 	} = attributes;
@@ -31,12 +34,19 @@ function GlobalTypographyEdit( { attributes, setAttributes, className } ) {
 
 	return (
 		<div className={ className }>
-			<Markup />
+			<Markup
+				fontSizeBase={ fontSizeBase }
+				lineHeightHeading={ lineHeightHeading }
+				lineHeightBase={ lineHeightBase }
+				typeScale={ typeScale }
+			/>
 			<InspectorControls>
 				<FontSizePanel
 					{ ...{
+						fontFamilyBase,
+						fontFamilyHeading,
 						fontSizeBase,
-						lineHeight,
+						lineHeightBase,
 						lineHeightHeading,
 						typeScale,
 						updateAttribute,
@@ -48,14 +58,18 @@ function GlobalTypographyEdit( { attributes, setAttributes, className } ) {
 }
 
 function FontSizePanel( {
+	fontFamilyBase,
+	fontFamilyHeading,
 	fontSizeBase,
-	lineHeight,
+	lineHeightBase,
 	lineHeightHeading,
 	typeScale,
 	updateAttribute,
 } ) {
 	const updateHeadingSizes = ( headingSizes ) => {
 		const headings = Object.keys( headingSizes );
+		const paragraphSize = headingSizes.h6;
+
 		headings.forEach( ( heading ) => {
 			const size = headingSizes[ heading ];
 			configSet(
@@ -63,63 +77,78 @@ function FontSizePanel( {
 				`${ size }px`
 			);
 		} );
+
+		configSet( 'typography.fontSizeBase', `${ paragraphSize }px` );
 	};
+
+	const updateProp = ( prop ) => ( value ) => updateAttribute( prop, value );
 
 	const updateFontSize = ( value ) => {
 		updateAttribute( 'fontSizeBase', value );
-		const headingSizes = generateHeadingSizes( value, typeScale );
+		const headingSizes = generateFontSizes( value, typeScale );
 		updateHeadingSizes( headingSizes );
 	};
-	const updateLineHeight = ( value ) => {
-		updateAttribute( 'lineHeight', value );
-	};
-	const updateLineHeightHeading = ( value ) => {
-		updateAttribute( 'lineHeightHeading', value );
-	};
+
 	const updateTypeScale = ( value ) => {
 		updateAttribute( 'typeScale', value );
-		const headingSizes = generateHeadingSizes( fontSizeBase, value );
+		const headingSizes = generateFontSizes( fontSizeBase, value );
 		updateHeadingSizes( headingSizes );
 	};
 
 	return (
-		<PanelBody>
-			<RangeControl
-				label="Font Size"
-				onChange={ updateFontSize }
-				value={ fontSizeBase }
-				min={ 8 }
-				max={ 30 }
-				initialPosition={ 16 }
-			/>
-			<RangeControl
-				label="Type Scale"
-				onChange={ updateTypeScale }
-				value={ typeScale }
-				min={ 1 }
-				max={ 3 }
-				initialPosition={ 1.4 }
-				step={ 0.05 }
-			/>
-			<RangeControl
-				label="Heading Line Height"
-				onChange={ updateLineHeightHeading }
-				value={ lineHeightHeading }
-				min={ 0.5 }
-				max={ 2 }
-				initialPosition={ 1.25 }
-				step={ 0.1 }
-			/>
-			<RangeControl
-				label="Line Height"
-				onChange={ updateLineHeight }
-				value={ lineHeight }
-				min={ 0 }
-				max={ 2 }
-				initialPosition={ 1.5 }
-				step={ 0.1 }
-			/>
-		</PanelBody>
+		<>
+			<PanelBody title="Font">
+				<TextControl
+					label="Heading Font"
+					onChange={ updateProp( 'fontFamilyHeading' ) }
+					value={ fontFamilyHeading }
+				/>
+				<TextControl
+					label="Body Font"
+					onChange={ updateProp( 'fontFamilyBase' ) }
+					value={ fontFamilyBase }
+				/>
+			</PanelBody>
+			<PanelBody title="Sizing">
+				<RangeControl
+					label="Font Size"
+					onChange={ updateFontSize }
+					value={ fontSizeBase }
+					min={ 8 }
+					max={ 30 }
+					initialPosition={ 16 }
+				/>
+				<RangeControl
+					label="Type Scale"
+					onChange={ updateTypeScale }
+					value={ typeScale }
+					min={ 1 }
+					max={ 2 }
+					initialPosition={ 1.4 }
+					step={ 0.05 }
+				/>
+			</PanelBody>
+			<PanelBody title="Spacing">
+				<RangeControl
+					label="Heading Line Height"
+					onChange={ updateProp( 'lineHeightHeading' ) }
+					value={ lineHeightHeading }
+					min={ 1 }
+					max={ 2 }
+					initialPosition={ 1.25 }
+					step={ 0.05 }
+				/>
+				<RangeControl
+					label="Line Height"
+					onChange={ updateProp( 'lineHeightBase' ) }
+					value={ lineHeightBase }
+					min={ 1 }
+					max={ 2.5 }
+					initialPosition={ 1.5 }
+					step={ 0.05 }
+				/>
+			</PanelBody>
+		</>
 	);
 }
 
@@ -133,31 +162,30 @@ function valueOf( prop, fallback ) {
 	return ! isUndefined( prop ) ? prop : fallback;
 }
 
-function generateHeadingSizes( fontSize = 16, typeScale = 1.25 ) {
-	return {
-		h1: fontSize * Math.pow( typeScale, 5 ),
-		h2: fontSize * Math.pow( typeScale, 4 ),
-		h3: fontSize * Math.pow( typeScale, 3 ),
-		h4: fontSize * Math.pow( typeScale, 2 ),
-		h5: fontSize * Math.pow( typeScale, 1 ),
-		h6: fontSize,
-	};
-}
-
 function withDefaults( WrappedComponent ) {
 	return ( props ) => {
 		const { attributes, ...restProps } = props;
 		const {
+			fontFamilyBase,
+			fontFamilyHeading,
 			fontSizeBase,
-			lineHeight,
+			lineHeightBase,
 			lineHeightHeading,
 			typeScale,
 			...otherAttributes
 		} = attributes;
 
 		const enhancedAttributes = {
+			fontFamilyBase: valueOf(
+				fontFamilyBase,
+				'NonBreakingSpaceOverride, "Hoefler Text", Garamond, "Times New Roman", serif'
+			),
+			fontFamilyHeading: valueOf(
+				fontFamilyHeading,
+				'"Inter var", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif'
+			),
 			fontSizeBase: valueOf( fontSizeBase, 16 ),
-			lineHeight: valueOf( lineHeight, 1.5 ),
+			lineHeightBase: valueOf( lineHeightBase, 1.5 ),
 			lineHeightHeading: valueOf( lineHeightHeading, 1.25 ),
 			typeScale: valueOf( typeScale, 1.25 ),
 			...otherAttributes,

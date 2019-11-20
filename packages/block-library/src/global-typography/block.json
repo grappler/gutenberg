@@ -2,6 +2,12 @@
 	"name": "core/global-typography",
 	"category": "layout",
 	"attributes": {
+		"fontFamilyBase": {
+			"type": "string"
+		},
+		"fontFamilyHeading": {
+			"type": "string"
+		},
 		"fontSizeBase": {
 			"type": "string"
 		},
