@@ -1,0 +1,35 @@
+@mixin globalTypographyStyles() {
+	h1 {
+		font-size: var(--bravas-typography-fontSizeH1);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+
+	h2 {
+		font-size: var(--bravas-typography-fontSizeH2);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+
+	h3 {
+		font-size: var(--bravas-typography-fontSizeH3);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+
+	h4 {
+		font-size: var(--bravas-typography-fontSizeH4);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+
+	h5 {
+		font-size: var(--bravas-typography-fontSizeH5);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+
+	h6 {
+		font-size: var(--bravas-typography-fontSizeH6);
+		line-height: var(--bravas-typography-lineHeightHeading);
+	}
+}
+
+@at-root {
+	@include globalTypographyStyles;
+}

@@ -1,0 +1,21 @@
+{
+	"name": "core/global-typography",
+	"category": "layout",
+	"attributes": {
+		"fontSizeBase": {
+			"type": "string"
+		},
+		"typeScale": {
+			"type": "string"
+		},
+		"headingLineHeight": {
+			"type": "string"
+		},
+		"lineHeight": {
+			"type": "string"
+		},
+		"lineHeightHeading": {
+			"type": "string"
+		}
+	}
+}

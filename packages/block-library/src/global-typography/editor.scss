@@ -1,0 +1,13 @@
+@import "./style.scss";
+
+.block-editor .editor-styles-wrapper .wp-block {
+	@include globalTypographyStyles;
+}
+
+.block-editor .wp-block-global-typography {
+	.wp-block-global-typography__headings {
+		& > * {
+			margin: 0 0 10px;
+		}
+	}
+}
