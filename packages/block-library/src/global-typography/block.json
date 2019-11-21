@@ -14,9 +14,6 @@
 		"typeScale": {
 			"type": "string"
 		},
-		"headingLineHeight": {
-			"type": "string"
-		},
 		"lineHeight": {
 			"type": "string"
 		},

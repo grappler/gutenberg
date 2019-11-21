@@ -2,6 +2,8 @@
  * Internal dependencies
  */
 import { config } from './config';
+import { generateFontSizes } from './utils';
+export * from './utils';
 
 const defaultConfig = {
 	typography: {
@@ -9,12 +11,8 @@ const defaultConfig = {
 			'NonBreakingSpaceOverride, "Hoefler Text", Garamond, "Times New Roman", serif',
 		fontFamilyHeading:
 			'"Inter var", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif',
-		fontSizeH1: '48px',
-		fontSizeH2: '40px',
-		fontSizeH3: '31px',
-		fontSizeH4: '25px',
-		fontSizeH5: '20px',
-		fontSizeH6: '16px',
+		fontSizeBase: 16,
+		typeScale: 1.25,
 		lineHeightBase: 1.5,
 		lineHeightHeading: 1.25,
 	},
@@ -25,7 +23,22 @@ const defaultConfig = {
 	},
 };
 
-config.apply( defaultConfig );
+const enhanceConfig = ( baseConfig ) => {
+	const nextConfig = { ...baseConfig };
+	const fontSizes = generateFontSizes( nextConfig.typography.fontSizeBase );
+
+	// Generate font sizes
+	// TODO: Potentially replace with REM based solution
+	Object.keys( fontSizes ).forEach( ( key ) => {
+		const value = fontSizes[ key ];
+		const fontKey = `fontSize${ key.toUpperCase() }`;
+		nextConfig.typography[ fontKey ] = `${ value }px`;
+	} );
+
+	return nextConfig;
+};
+
+config.apply( enhanceConfig( defaultConfig ) );
 
 window.bravas = {
 	config,

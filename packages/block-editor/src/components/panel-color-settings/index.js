@@ -9,7 +9,6 @@ import { some } from 'lodash';
 import {
 	PanelBody,
 	ColorIndicator,
-	ToggleControl,
 } from '@wordpress/components';
 import { ifCondition } from '@wordpress/compose';
 import { sprintf, __ } from '@wordpress/i18n';
@@ -89,13 +88,11 @@ const renderColorIndicators = ( colorSettings, colors ) => {
 // an array of components/nodes here wouldn't be feasible.
 export const PanelColorSettings = ifCondition( hasColorsToChoose )(
 	( {
-		applyGlobally,
 		children,
 		colors,
 		colorSettings,
 		disableCustomColors,
 		title,
-		onToggleApplyGlobally,
 		...props
 	} ) => {
 		const titleElement = (
@@ -123,11 +120,6 @@ export const PanelColorSettings = ifCondition( hasColorsToChoose )(
 				) ) }
 
 				{ children }
-				<ToggleControl
-					label="Apply to All"
-					onChange={ onToggleApplyGlobally }
-					checked={ applyGlobally }
-				/>
 			</PanelBody>
 		);
 	}

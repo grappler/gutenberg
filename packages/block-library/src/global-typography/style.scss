@@ -45,6 +45,14 @@
 	}
 }
 
+@mixin titleFontStyles() {
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 1;
+	opacity: 0.6;
+	text-transform: uppercase;
+}
+
 @at-root {
 	@include globalTypographyStyles;
 }
@@ -52,6 +60,10 @@
 .wp-block-global-typography__section {
 	max-width: 800px;
 	margin: 0 auto 60px;
+
+	&:last-of-type {
+		padding-bottom: 30px;
+	}
 }
 
 .wp-block-global-typography__header {
@@ -61,11 +73,7 @@
 }
 
 .wp-block-global-typography__title {
-	font-size: 11px;
-	font-weight: bold;
-	line-height: 1;
-	opacity: 0.6;
-	text-transform: uppercase;
+	@include titleFontStyles;
 }
 
 .wp-block-global-typography .wp-block-global-typography__type-scale-list {
@@ -94,4 +102,27 @@
 	justify-content: space-between;
 	padding: 16px 0;
 	border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+}
+
+
+.wp-block-global-typography__font-content {
+	display: flex;
+
+	& > * {
+		flex: 1;
+		margin-right: 32px;
+
+		&:last-of-type {
+			margin-right: 0;
+		}
+	}
+}
+
+.wp-block-global-typography__alphabet-title {
+	@include titleFontStyles;
+	margin: 10px 0;
+
+	& + * {
+		margin-top: 0 !important;
+	}
 }

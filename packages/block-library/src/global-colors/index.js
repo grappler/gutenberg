@@ -15,9 +15,9 @@ const { name } = metadata;
 export { metadata, name };
 
 export const settings = {
-	title: __( 'Typography' ),
-	description: __( 'Sets the fonts for your site' ),
-	keywords: [ __( 'typography' ), __( 'text' ), __( 'font' ) ],
+	title: __( 'Colors' ),
+	description: __( 'Sets the colors for your site.' ),
+	keywords: [ __( 'color' ) ],
 	supports: {
 		align: true,
 	},

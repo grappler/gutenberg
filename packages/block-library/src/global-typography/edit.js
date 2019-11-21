@@ -14,7 +14,7 @@ import { InspectorControls } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import Markup from './markup';
+import Markup from './components/markup';
 import { generateFontSizes } from './utils';
 
 function GlobalTypographyEdit( { attributes, setAttributes, className } ) {
@@ -35,10 +35,14 @@ function GlobalTypographyEdit( { attributes, setAttributes, className } ) {
 	return (
 		<div className={ className }>
 			<Markup
-				fontSizeBase={ fontSizeBase }
-				lineHeightHeading={ lineHeightHeading }
-				lineHeightBase={ lineHeightBase }
-				typeScale={ typeScale }
+				{ ...{
+					fontFamilyBase,
+					fontFamilyHeading,
+					fontSizeBase,
+					lineHeightBase,
+					lineHeightHeading,
+					typeScale,
+				} }
 			/>
 			<InspectorControls>
 				<FontSizePanel
@@ -123,7 +127,7 @@ function FontSizePanel( {
 					onChange={ updateTypeScale }
 					value={ typeScale }
 					min={ 1 }
-					max={ 2 }
+					max={ 1.65 }
 					initialPosition={ 1.4 }
 					step={ 0.05 }
 				/>
@@ -176,6 +180,7 @@ function withDefaults( WrappedComponent ) {
 		} = attributes;
 
 		const enhancedAttributes = {
+			...otherAttributes,
 			fontFamilyBase: valueOf(
 				fontFamilyBase,
 				'NonBreakingSpaceOverride, "Hoefler Text", Garamond, "Times New Roman", serif'
@@ -188,7 +193,6 @@ function withDefaults( WrappedComponent ) {
 			lineHeightBase: valueOf( lineHeightBase, 1.5 ),
 			lineHeightHeading: valueOf( lineHeightHeading, 1.25 ),
 			typeScale: valueOf( typeScale, 1.25 ),
-			...otherAttributes,
 		};
 
 		return (

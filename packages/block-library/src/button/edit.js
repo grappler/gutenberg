@@ -177,12 +177,6 @@ function ButtonEdit( {
 		[ setAttributes ]
 	);
 
-	const onToggleApplyGlobally = ( value ) => {
-		setAttributes( {
-			applyGlobally: value,
-		} );
-	};
-
 	const onToggleOpenInNewTab = useCallback(
 		( value ) => {
 			const newLinkTarget = value ? '_blank' : undefined;
@@ -290,8 +284,6 @@ function ButtonEdit( {
 			<InspectorControls>
 				<PanelColorSettings
 					title={ __( 'Color Settings' ) }
-					onToggleApplyGlobally={ onToggleApplyGlobally }
-					applyGlobally={ applyGlobally }
 					colorSettings={ [
 						{
 							value: backgroundColor.color,
